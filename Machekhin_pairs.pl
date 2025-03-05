@@ -1,15 +1,16 @@
 initial_state(state([1,2,3], [1,2,3], [], [], left)).
 
-goal_state(state([], [], [1,2,3], [1,2,3], right)).
+goal_state(state([], [], RH, RW, right)) :-
+    sort(RH, RHS), sort(RW, RWS), RHS=[1,2,3], RWS=[1,2,3].
 
 safe_bank(H, W) :-
     W = [] ; 
      H = [] ; 
      forall(member(Wife, W), member(Wife, H)).
 
-safe_state(state(LH, LW, RH, RW, B)) :-
-    (safe_bank(LH, LW), B=right);
-    (safe_bank(RH, RW), B=left).
+safe_state(state(LH, LW, RH, RW, _)) :-
+    safe_bank(LH, LW),
+    safe_bank(RH, RW).
 
 
 move(state(LH, LW, RH, RW, left), state(LH1, LW1, RH1, RW1, right)) :-
